@@ -41,8 +41,8 @@ def get_time():  # Create a time stamp for log entries
 
 def get_data():  # Gather the data
     stateurl = (
-        f"https://api.covidactnow.org/v2/state/CO.json?apiKey=" + CAN_KEY
-    )  # URL for grabbing US nationwide data
+        f"https://api.covidactnow.org/v2/state/" + mystate + ".json?apiKey=" + CAN_KEY
+    )  # URL for grabbing state data
     streq = requests.get(stateurl).content.decode("utf-8")
     stdata = json.loads(streq)  # convert from json to dict
 
@@ -94,7 +94,7 @@ def main():  # Send Tweet
         xmessage = f"Message exceeds 280 characters.\n{len(tmessage)}\n Tweet not sent."
         sys.exit()
     else:
-        twitter.update_status(status=tmessage)  # Tweet the message
+        # twitter.update_status(status=tmessage)  # Tweet the message
         logging.info(f" Twitter message:\n {tmessage}")
         logging.info(f"{get_time()} - Posted to Twitter.\n")
         sys.exit()
