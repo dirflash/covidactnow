@@ -99,7 +99,10 @@ def get_data():  # Gather the data
     table.add_row("Second Dose %", stvaxed)
     table.add_row("Updated", stlastupdated)
 
-    console.print(table)
+    if table.columns:
+        console.print(table)
+    else:
+        print("[i]No data...[/i]")
 
     logging.info(f"{get_time()} - Tweet created.")
     console.log(f"Tweet created.", style="magenta")
