@@ -84,7 +84,7 @@ def get_data():  # Gather the data
         f"Stats last updated: {stlastupdated}\n"
     )
 
-    table = Table(title="COVID-19 Statistics", style="green")
+    table = Table(title="COVID-19 Statistics for " + mystate, style="green")
 
     table.add_column("Type", style="green")
     table.add_column("Date", style="green")
@@ -122,7 +122,7 @@ def main():  # Send Tweet
         xmessage = f"Message exceeds 280 characters.\n{len(tmessage)}\n Tweet not sent."
         sys.exit()
     else:
-        twitter.update_status(status=tmessage)  # Tweet the message
+        # twitter.update_status(status=tmessage)  # Tweet the message
         logging.info(f" Twitter message:\n {tmessage}")
         logging.info(f"{get_time()} - Posted to Twitter.\n")
         console.log(f"Posted to Tweeter.", style="magenta")
