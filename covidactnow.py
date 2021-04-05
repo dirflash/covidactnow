@@ -16,6 +16,7 @@ import sys
 import os
 from rich import print
 from rich.console import Console
+from rich.table import Table
 
 console = Console()
 
@@ -78,10 +79,27 @@ def get_data():  # Gather the data
         f"{stcases} total cases\n"
         f"{stdeaths} total deaths\n"
         f"{stposrate} state positivity rate\n"
-        f"{stfirstdose} ({st1vaxed}) administered first doses\n"
+        f"{stfirstdose} ({st1vaxed}) first doses\n"
         f"{stfinaldose} ({stvaxed}) fully vaccinated\n\n"
         f"Stats last updated: {stlastupdated}\n"
     )
+
+    table = Table(title="COVID-19 Statistics", style="green")
+
+    table.add_column("Type", style="green")
+    table.add_column("Date", style="green")
+
+    table.add_row("New Cases", sttodaycases)
+    table.add_row("Total Cases", stcases)
+    table.add_row("Deaths", sttodaydeaths)
+    table.add_row("Positivity Rate", stposrate)
+    table.add_row("First Dose", stfirstdose)
+    table.add_row("First Dose %", st1vaxed)
+    table.add_row("Second Dose", stfinaldose)
+    table.add_row("Second Dose %", stvaxed)
+    table.add_row("Updated", stlastupdated)
+
+    print(table)
 
     logging.info(f"{get_time()} - Tweet created.")
     console.log(f"Tweet created.", style="magenta")
