@@ -99,7 +99,7 @@ def get_data():  # Gather the data
     table.add_row("Second Dose %", stvaxed)
     table.add_row("Updated", stlastupdated)
 
-    print(table)
+    console.print(table)
 
     logging.info(f"{get_time()} - Tweet created.")
     console.log(f"Tweet created.", style="magenta")
@@ -122,7 +122,7 @@ def main():  # Send Tweet
         xmessage = f"Message exceeds 280 characters.\n{len(tmessage)}\n Tweet not sent."
         sys.exit()
     else:
-        # twitter.update_status(status=tmessage)  # Tweet the message
+        twitter.update_status(status=tmessage)  # Tweet the message
         logging.info(f" Twitter message:\n {tmessage}")
         logging.info(f"{get_time()} - Posted to Twitter.\n")
         console.log(f"Posted to Tweeter.", style="magenta")
