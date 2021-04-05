@@ -14,6 +14,10 @@ from twython import Twython, TwythonError
 import logging
 import sys
 import os
+from rich import print
+from rich.console import Console
+
+console = Console()
 
 
 mystate = "CO"  # Set your state abbreviation here. Must be capitalized.
@@ -65,6 +69,7 @@ def get_data():  # Gather the data
         stlastupdated = stdata["lastUpdatedDate"]
 
         logging.info(f"{get_time()} - Gathered {mystate} data.")
+        console.log(f"Gathered {mystate} data.", style="magenta")
 
     message = (
         f"\nLast 24-hour #COVID-19 data from #Colorado:\n"
@@ -79,6 +84,7 @@ def get_data():  # Gather the data
     )
 
     logging.info(f"{get_time()} - Tweet created.")
+    console.log(f"Tweet created.", style="magenta")
 
     return message
 
@@ -91,12 +97,17 @@ def main():  # Send Tweet
         logging.info(
             f"{get_time()} - Message exceeds 280 characters. {len(tmessage)} Tweet not sent."
         )
+        console.log(
+            f"Message exceeds 280 characters. {len(tmessage)} Tweet not sent.",
+            style="bold and red",
+        )
         xmessage = f"Message exceeds 280 characters.\n{len(tmessage)}\n Tweet not sent."
         sys.exit()
     else:
-        twitter.update_status(status=tmessage)  # Tweet the message
+        # twitter.update_status(status=tmessage)  # Tweet the message
         logging.info(f" Twitter message:\n {tmessage}")
         logging.info(f"{get_time()} - Posted to Twitter.\n")
+        console.log(f"Posted to Tweeter.", style="magenta")
         sys.exit()
 
 
