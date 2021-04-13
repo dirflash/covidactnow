@@ -58,6 +58,7 @@ def get_data():  # Gather the data
             stdata["actuals"]["cases"]
         )  # Add commas to number strings
         sttodaycases = "{:,}".format(stdata["actuals"]["newCases"])
+        sthospitalizations = stdata["actuals"]["hospitalBeds"]["currentUsageCovid"]
         stdeaths = "{:,}".format(stdata["actuals"]["deaths"])
         sttodaydeaths = "{:,}".format(stdata["actuals"]["newDeaths"])
         stposrate = "{:.2%}".format(stdata["metrics"]["testPositivityRatio"])
@@ -75,6 +76,7 @@ def get_data():  # Gather the data
     message = (
         f"\nLast 24-hour #COVID-19 data from #Colorado:\n"
         f"{sttodaycases} new cases\n"
+        f"{sthospitalizations} hospitalizations\n"
         f"{sttodaydeaths} deaths\n"
         f"{stcases} total cases\n"
         f"{stdeaths} total deaths\n"
