@@ -92,6 +92,7 @@ def get_data():  # Gather the data
     table.add_column("Date", style="green")
 
     table.add_row("New Cases", sttodaycases)
+    table.add_row("Hospitalizations", sthospitalizations)
     table.add_row("Total Cases", stcases)
     table.add_row("Deaths", sttodaydeaths)
     table.add_row("Positivity Rate", stposrate)
