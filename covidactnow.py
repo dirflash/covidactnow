@@ -58,7 +58,9 @@ def get_data():  # Gather the data
             stdata["actuals"]["cases"]
         )  # Add commas to number strings
         sttodaycases = "{:,}".format(stdata["actuals"]["newCases"])
-        sthospitalizations = stdata["actuals"]["hospitalBeds"]["currentUsageCovid"]
+        sthospitalizations = "{:,}".format(
+            stdata["actuals"]["hospitalBeds"]["currentUsageCovid"]
+        )
         stdeaths = "{:,}".format(stdata["actuals"]["deaths"])
         sttodaydeaths = "{:,}".format(stdata["actuals"]["newDeaths"])
         stposrate = "{:.2%}".format(stdata["metrics"]["testPositivityRatio"])

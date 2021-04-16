@@ -702,3 +702,25 @@ Stats last updated: 2021-04-14
 #Python
 INFO:root:2021/04/14 17:18:46 - Posted to Twitter.
 
+INFO:root:2021/04/15 19:27:37 - Gathered CO data.
+INFO:root:2021/04/15 19:28:12 - Gathered CO data.
+INFO:root:2021/04/15 19:28:52 - Gathered CO data.
+INFO:root:2021/04/15 19:30:17 - Gathered CO data.
+INFO:root:2021/04/15 19:30:17 - Tweet created.
+INFO:root: Twitter message:
+ 
+Last 24-hour #COVID-19 data from #Colorado:
+2,198 new cases
+486 hospitalizations
+3 deaths
+486,277 total cases
+6,309 total deaths
+5.59% state positivity rate
+2,276,754 (39.54%) first doses
+1,358,993 (23.60%) fully vaccinated
+
+Stats last updated: 2021-04-15
+
+#Python
+INFO:root:2021/04/15 19:30:18 - Posted to Twitter.
+
