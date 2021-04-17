@@ -63,7 +63,8 @@ def get_data():  # Gather the data
         )
         stdeaths = "{:,}".format(stdata["actuals"]["deaths"])
         sttodaydeaths = "{:,}".format(stdata["actuals"]["newDeaths"])
-        stposrate = "{:.2%}".format(stdata["metrics"]["testPositivityRatio"])
+        posfl = stdata["metrics"]["testPositivityRatio"]
+        stposrate = "{:.2%}".format(posfl)
         stfirstdose = "{:,}".format(stdata["actuals"]["vaccinationsInitiated"])
         st1vax = (stdata["actuals"]["vaccinationsInitiated"]) / (stdata["population"])
         st1vaxed = "{:.2%}".format(st1vax)
@@ -75,6 +76,12 @@ def get_data():  # Gather the data
         logging.info(f"{get_time()} - Gathered {mystate} data.")
         console.log(f"Gathered {mystate} data.", style="magenta")
 
+        pos = int(posfl * 1000)
+        if pos <= 50:
+            posmo = ":smiley:"
+        else:
+            posmo = ""
+
     message = (
         f"\nLast 24-hour #COVID-19 data from #Colorado:\n"
         f"{sttodaycases} new cases\n"
@@ -82,7 +89,7 @@ def get_data():  # Gather the data
         f"{sttodaydeaths} deaths\n"
         f"{stcases} total cases\n"
         f"{stdeaths} total deaths\n"
-        f"{stposrate} state positivity rate\n"
+        f"{stposrate} state positivity rate {posmo}\n"
         f"{stfirstdose} ({st1vaxed}) first doses\n"
         f"{stfinaldose} ({stvaxed}) fully vaccinated\n\n"
         f"Stats last updated: {stlastupdated}\n"
@@ -98,6 +105,7 @@ def get_data():  # Gather the data
     table.add_row("Total Cases", stcases)
     table.add_row("Deaths", sttodaydeaths)
     table.add_row("Positivity Rate", stposrate)
+    table.add_row("Emoji", posmo)
     table.add_row("First Dose", stfirstdose)
     table.add_row("First Dose %", st1vaxed)
     table.add_row("Second Dose", stfinaldose)
