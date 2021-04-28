@@ -2,5 +2,6 @@
 .venv
 .vscode
 .log
+.bat
 __pycache__
 logs/**
