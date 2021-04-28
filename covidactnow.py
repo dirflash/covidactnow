@@ -163,7 +163,7 @@ def main():  # Send Tweet
         xmessage = f"Message exceeds 280 characters.\n{len(tmessage)}\n Tweet not sent."
         sys.exit()
     else:
-        # twitter.update_status(status=tmessage)  # Tweet the message
+        twitter.update_status(status=tmessage)  # Tweet the message
         logging.info(f" Twitter message:\n {tmessage}")
         logging.info(f"{get_time()} - Posted to Twitter.\n")
         console.log(f"Posted to Tweeter.", style="magenta")
