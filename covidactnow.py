@@ -51,9 +51,13 @@ def get_data():  # Gather the data
     streq = requests.get(stateurl).content.decode("utf-8")
     stdata = json.loads(streq)  # convert from json to dict
 
+    usurl = f"https://api.covidactnow.org/v2/country/US" + ".json?apiKey=" + CAN_KEY
+    usreq = requests.get(usurl).content.decode("utf-8")
+    usdata = json.loads(usreq)
+
     if stdata["state"] == mystate:
         ### Format state data ###
-        stpop = "{:,}".format(stdata["population"])
+        # stpop = "{:,}".format(stdata["population"])
         stcases = "{:,}".format(
             stdata["actuals"]["cases"]
         )  # Add commas to number strings
@@ -82,6 +86,11 @@ def get_data():  # Gather the data
         else:
             posmo = ""
 
+        uscases = "{:,}".format(usdata["actuals"]["cases"])
+        ustodaycases = "{:,}".format(usdata["actuals"]["newCases"])
+        usdeaths = "{:,}".format(usdata["actuals"]["deaths"])
+        ustodaydeaths = "{:,}".format(usdata["actuals"]["newDeaths"])
+
     message = (
         f"\nLast 24-hour #COVID-19 data from #Colorado:\n"
         f"{sttodaycases} new cases\n"
@@ -91,29 +100,45 @@ def get_data():  # Gather the data
         f"{stdeaths} total deaths\n"
         f"{stposrate} state positivity rate {posmo}\n"
         f"{stfirstdose} ({st1vaxed}) first doses\n"
-        f"{stfinaldose} ({stvaxed}) fully vaccinated\n\n"
-        f"Stats last updated: {stlastupdated}\n"
+        f"{stfinaldose} ({stvaxed}) fully vaxed\n\n"
+        f"{usdeaths} US deaths\n\n"
+        f"Stats updated: {stlastupdated}\n"
     )
 
-    table = Table(title="COVID-19 Statistics for " + mystate, style="green")
+    sttable = Table(title="COVID-19 Statistics for " + mystate, style="green")
 
-    table.add_column("Type", style="green")
-    table.add_column("Date", style="green")
+    sttable.add_column("Type", style="green")
+    sttable.add_column("Data", justify="right", style="green")
 
-    table.add_row("New Cases", sttodaycases)
-    table.add_row("Hospitalizations", sthospitalizations)
-    table.add_row("Total Cases", stcases)
-    table.add_row("Deaths", sttodaydeaths)
-    table.add_row("Positivity Rate", stposrate)
-    table.add_row("Emoji", posmo)
-    table.add_row("First Dose", stfirstdose)
-    table.add_row("First Dose %", st1vaxed)
-    table.add_row("Second Dose", stfinaldose)
-    table.add_row("Second Dose %", stvaxed)
-    table.add_row("Updated", stlastupdated)
+    sttable.add_row("New Cases", sttodaycases)
+    sttable.add_row("Hospitalizations", sthospitalizations)
+    sttable.add_row("Total Cases", stcases)
+    sttable.add_row("Deaths", sttodaydeaths)
+    sttable.add_row("Positivity Rate", stposrate)
+    sttable.add_row("Emoji", posmo)
+    sttable.add_row("First Dose", stfirstdose)
+    sttable.add_row("First Dose %", st1vaxed)
+    sttable.add_row("Second Dose", stfinaldose)
+    sttable.add_row("Second Dose %", stvaxed)
+    sttable.add_row("Updated", stlastupdated)
 
-    if table.columns:
-        console.print(table)
+    if sttable.columns:
+        console.print(sttable)
+    else:
+        print("[i]No data...[/i]")
+
+    ustable = Table(title="COVID-19 Statistics for US", style="green")
+
+    ustable.add_column("Type", style="green")
+    ustable.add_column("Data", justify="right", style="green")
+
+    ustable.add_row("New Cases", ustodaycases)
+    ustable.add_row("Total Cases", uscases)
+    ustable.add_row("Deaths", ustodaydeaths)
+    ustable.add_row("Total Deaths", usdeaths)
+
+    if ustable.columns:
+        console.print(ustable)
     else:
         print("[i]No data...[/i]")
 
@@ -133,12 +158,12 @@ def main():  # Send Tweet
         )
         console.log(
             f"Message exceeds 280 characters. {len(tmessage)} Tweet not sent.",
-            style="bold and red",
+            style="bold red",
         )
         xmessage = f"Message exceeds 280 characters.\n{len(tmessage)}\n Tweet not sent."
         sys.exit()
     else:
-        twitter.update_status(status=tmessage)  # Tweet the message
+        # twitter.update_status(status=tmessage)  # Tweet the message
         logging.info(f" Twitter message:\n {tmessage}")
         logging.info(f"{get_time()} - Posted to Twitter.\n")
         console.log(f"Posted to Tweeter.", style="magenta")
