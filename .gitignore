@@ -1,7 +1,7 @@
 .git
 .venv
 .vscode
-.log
-.bat
+*.log
+*.bat
 __pycache__
 logs/**
