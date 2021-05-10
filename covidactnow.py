@@ -98,7 +98,7 @@ def get_data():  # Gather the data
         f"{sttodaydeaths} deaths\n"
         f"{stcases} total cases\n"
         f"{stdeaths} total deaths\n"
-        f"{stposrate} state positivity rate {posmo}\n"
+        f"{stposrate} state positivity rate\n"
         f"{stfirstdose} ({st1vaxed}) first doses\n"
         f"{stfinaldose} ({stvaxed}) fully vaxed\n\n"
         f"{usdeaths} US deaths\n\n"
