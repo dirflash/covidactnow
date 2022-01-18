@@ -7,13 +7,13 @@
 # Python Version: 3.8.8
 # Description: Gather COVID-19 stats and post them to Twitter
 
-import requests
 import json
-import time
-from twython import Twython, TwythonError
+from time import time, sleep, strftime
 import logging
 import sys
 import os
+import requests
+from twython import Twython, TwythonError
 from rich import print
 from rich.console import Console
 from rich.table import Table
@@ -40,7 +40,7 @@ twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
 
 def get_time():  # Create a time stamp for log entries
-    now = str(time.strftime("%Y/%m/%d %H:%M:%S"))
+    now = str(strftime("%Y/%m/%d %H:%M:%S"))
     return now
 
 
@@ -57,7 +57,6 @@ def get_data():  # Gather the data
 
     if stdata["state"] == mystate:
         ### Format state data ###
-        # stpop = "{:,}".format(stdata["population"])
         stcases = "{:,}".format(
             stdata["actuals"]["cases"]
         )  # Add commas to number strings
@@ -100,7 +99,7 @@ def get_data():  # Gather the data
         f"{stdeaths} total deaths\n"
         f"{stposrate} state positivity rate\n"
         f"{stfirstdose} ({st1vaxed}) first doses\n"
-        f"{stfinaldose} ({stvaxed}) fully vaxed\n\n"
+        f"{stfinaldose} ({stvaxed}) fully vaxed\n"
         f"{usdeaths} US deaths\n\n"
         f"Stats updated: {stlastupdated}\n"
     )
@@ -150,7 +149,7 @@ def get_data():  # Gather the data
 
 def main():  # Send Tweet
     xmessage = get_data()
-    tmessage = f"{xmessage}\n{hashtags}"
+    tmessage = f"{xmessage}{hashtags}"
     ### Tweet Message ###
     if len(tmessage) > 280:
         logging.info(
@@ -167,6 +166,7 @@ def main():  # Send Tweet
         logging.info(f" Twitter message:\n {tmessage}")
         logging.info(f"{get_time()} - Posted to Twitter.\n")
         console.log(f"Posted to Tweeter.", style="magenta")
+        sleep(60)
         sys.exit()
 
 
