@@ -8,25 +8,25 @@
 # Description: Gather COVID-19 stats and post them to Twitter
 
 import json
-from time import time, sleep, strftime
+from time import sleep, strftime
 import logging
 import sys
 import os
 import requests
 from twython import Twython, TwythonError
-from rich import print
+from rich import print  # pylint: disable=redefined-builtin
 from rich.console import Console
 from rich.table import Table
 
 console = Console()
 
 
-mystate = "CO"  # Set your state abbreviation here. Must be capitalized.
-hashtags = f"#Python"  # Hashtags to be appended to the tweet
+MYSTATE = "CO"  # Set your state abbreviation here. Must be capitalized.
+HASHTAGS = "#Python"  # Hashtags to be appended to the tweet
 
 ### Set up logging parameters ###
-logfile = "covidactnow.log"
-logging.basicConfig(filename=logfile, level=logging.INFO)
+LOGFILE = "covidactnow.log"
+logging.basicConfig(filename=LOGFILE, level=logging.INFO)
 
 ### covidactnow API Key
 CAN_KEY = os.environ.get("CAN_API_KEY")
@@ -39,14 +39,24 @@ OAUTH_TOKEN_SECRET = os.environ.get("TWITTER_OAUTH_SECRET")
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
 
-def get_time():  # Create a time stamp for log entries
+def get_time():
+    """Create a time stamp for log entries
+
+    Returns:
+        time: current time formatted
+    """
     now = str(strftime("%Y/%m/%d %H:%M:%S"))
     return now
 
 
-def get_data():  # Gather the data
+def get_data():
+    """Gather the data
+
+    Returns:
+        string: Formatted Twitter message
+    """
     stateurl = (
-        f"https://api.covidactnow.org/v2/state/" + mystate + ".json?apiKey=" + CAN_KEY
+        f"https://api.covidactnow.org/v2/state/" + MYSTATE + ".json?apiKey=" + CAN_KEY
     )  # URL for grabbing state data
     streq = requests.get(stateurl).content.decode("utf-8")
     stdata = json.loads(streq)  # convert from json to dict
@@ -55,7 +65,7 @@ def get_data():  # Gather the data
     usreq = requests.get(usurl).content.decode("utf-8")
     usdata = json.loads(usreq)
 
-    if stdata["state"] == mystate:
+    if stdata["state"] == MYSTATE:
         ### Format state data ###
         stcases = "{:,}".format(
             stdata["actuals"]["cases"]
@@ -75,9 +85,10 @@ def get_data():  # Gather the data
         stvax = (stdata["actuals"]["vaccinationsCompleted"]) / (stdata["population"])
         stvaxed = "{:.2%}".format(stvax)
         stlastupdated = stdata["lastUpdatedDate"]
+        wklynewcases = str(stdata["metrics"]["weeklyNewCasesPer100k"])
 
-        logging.info(f"{get_time()} - Gathered {mystate} data.")
-        console.log(f"Gathered {mystate} data.", style="magenta")
+        logging.info(f"{get_time()} - Gathered {MYSTATE} data.")
+        console.log(f"Gathered {MYSTATE} data.", style="magenta")
 
         pos = int(posfl * 1000)
         if pos <= 50:
@@ -98,18 +109,19 @@ def get_data():  # Gather the data
         f"{stcases} total cases\n"
         f"{stdeaths} total deaths\n"
         f"{stposrate} state positivity rate\n"
-        f"{stfirstdose} ({st1vaxed}) first doses\n"
+        f"{wklynewcases} weekly cases per 100k\n"
         f"{stfinaldose} ({stvaxed}) fully vaxed\n"
         f"{usdeaths} US deaths\n\n"
         f"Stats updated: {stlastupdated}\n"
     )
 
-    sttable = Table(title="COVID-19 Statistics for " + mystate, style="green")
+    sttable = Table(title="COVID-19 Statistics for " + MYSTATE, style="green")
 
     sttable.add_column("Type", style="green")
     sttable.add_column("Data", justify="right", style="green")
 
     sttable.add_row("New Cases", sttodaycases)
+    sttable.add_row("Wkly Cases per 100k", wklynewcases)
     sttable.add_row("Hospitalizations", sthospitalizations)
     sttable.add_row("Total Cases", stcases)
     sttable.add_row("Deaths", sttodaydeaths)
@@ -142,14 +154,15 @@ def get_data():  # Gather the data
         print("[i]No data...[/i]")
 
     logging.info(f"{get_time()} - Tweet created.")
-    console.log(f"Tweet created.", style="magenta")
+    console.log("Tweet created.", style="magenta")
 
     return message
 
 
-def main():  # Send Tweet
+def main():
+    """Send Tweet"""
     xmessage = get_data()
-    tmessage = f"{xmessage}{hashtags}"
+    tmessage = f"{xmessage}{HASHTAGS}"
     ### Tweet Message ###
     if len(tmessage) > 280:
         logging.info(
