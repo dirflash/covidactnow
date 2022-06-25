@@ -55,8 +55,8 @@ def get_data():
     Returns:
         string: Formatted Twitter message
     """
-    stateurl = f"""https://api.covidactnow.org/v2/state/
-                        {MYSTATE}.json?apiKey={CAN_KEY}"""  # URL for grabbing state data
+    # URL for grabbing state data
+    stateurl = f"https://api.covidactnow.org/v2/state/{MYSTATE}.json?apiKey={CAN_KEY}"
     streq = requests.get(stateurl).content.decode("utf-8")
     stdata = json.loads(streq)  # convert from json to dict
 
