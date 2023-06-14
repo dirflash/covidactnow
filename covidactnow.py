@@ -3,7 +3,7 @@
 #!/usr/bin/python3
 # File name: covidactnow.py
 # Date created: 3/31/2021
-# Date last modified: 4/1/2021
+# Date last modified: 6/14/2023
 # Python Version: 3.8.8
 # Description: Gather COVID-19 stats and post them to Twitter
 
@@ -76,7 +76,10 @@ def get_data():
         stdeaths = "{:,}".format(stdata["actuals"]["deaths"])
         sttodaydeaths = "{:,}".format(stdata["actuals"]["newDeaths"])
         posfl = stdata["metrics"]["testPositivityRatio"]
-        stposrate = "{:.2%}".format(posfl)
+        if posfl is None:
+            stposrate = "n/a"
+        else:
+            stposrate = "{:.2%}".format(posfl)
         stfirstdose = "{:,}".format(stdata["actuals"]["vaccinationsInitiated"])
         st1vax = (stdata["actuals"]["vaccinationsInitiated"]) / (stdata["population"])
         st1vaxed = "{:.2%}".format(st1vax)
@@ -89,9 +92,10 @@ def get_data():
         logging.info(f"{get_time()} - Gathered {MYSTATE} data.")
         console.log(f"Gathered {MYSTATE} data.", style="magenta")
 
-        pos = int(posfl * 1000)
-        if pos <= 50:
-            posmo = ":smiley:"
+        if posfl is not None:
+            pos = int(posfl * 1000)
+            if pos <= 50:
+                posmo = ":smiley:"
         else:
             posmo = ""
 
